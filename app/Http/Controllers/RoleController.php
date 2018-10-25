@@ -119,9 +119,9 @@ class RoleController extends Controller
             'permissions' =>'required',
         ]);
 
-        $input = $request->except(['permissions']);
+        $data = $request->except(['permissions']);
         $permissions = $request['permissions'];
-        $role->fill($input)->save();
+        $role->fill($data)->save();
 
         $p_all = Permission::all();//Get all permissions
 

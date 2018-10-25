@@ -54,16 +54,15 @@ class PermissionController extends Controller
         $name = $request['name'];
         $permission = new Permission();
         $permission->name = $name;
+        $permission->save();
 
         $roles = $request['roles'];
 
-        $permission->save();
-
-        if (!empty($request['roles'])) { //If one or more role is selected
+        if (!empty($roles)) { //If one or more role is selected
             foreach ($roles as $role) {
                 $r = Role::where('id', '=', $role)->firstOrFail(); //Match input role to db record
 
-                $permission = Permission::where('name', '=', $name)->first(); //Match input //permission to db record
+                $permission = Permission::where('name', '=', $name)->first(); // Combinar entrada // permissão para registro de db
                 $r->givePermissionTo($permission);
             }
         }
@@ -95,8 +94,9 @@ class PermissionController extends Controller
     public function edit($id)
     {
         $permission = Permission::findOrFail($id);
+        $roles = Role::all();
 
-        return view('permissions.edit', compact('permission'));
+        return view('permissions.edit', compact('permission', 'roles'));
     }
 
     /**
@@ -109,11 +109,31 @@ class PermissionController extends Controller
     public function update(Request $request, $id)
     {
         $permission = Permission::findOrFail($id);
+
         $this->validate($request, [
             'name'=>'required|max:40',
         ]);
-        $input = $request->all();
-        $permission->fill($input)->save();
+
+        $name = $request['name'];
+        $permission->name = $name;
+        $permission->save();
+
+        $roles = $request['roles'];
+
+        $r_all = Role::all();
+        foreach ($r_all as $r) {
+            $permission->revokePermissionTo($r); //Remove all roles associated with permission
+        }
+
+        if (!empty($roles)) {
+            foreach ($roles as $role) {
+                $r = Role::where('id', '=', $role)->firstOrFail(); //Get corresponding form //role in db
+
+                $permission = Permission::where('name', '=', $name)->first();
+
+                $r->givePermissionTo($permission);  //Assign role to permission
+            }
+        }
 
         return redirect()->route('permissions.index')
             ->with(

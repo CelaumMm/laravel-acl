@@ -13,8 +13,8 @@
                 </div>
                 <div class="card-body">
 
-                    {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT')) }} {{-- Form model para preencher
-                    automaticamente nossos campos com dados do usuário --}}
+                    {{-- Form model para preencher automaticamente nossos campos com dados do usuário --}} {{ Form::model($user, array('route'
+                    => array('users.update', $user->id), 'method' => 'PUT')) }}
 
                     <div class="form-group">
                         {{ Form::label('name', 'Name') }} {{ Form::text('name', null, array('class' => 'form-control')) }}
@@ -44,10 +44,10 @@
 
                     </div>
 
-                    {{ Form::button('<i class="fas fa-save"></i> Save', ['type' => 'submit','class' => 'btn btn-success'])
-                    }}
+                    {{ Form::button('<i class="fas fa-save"></i> Save', ['type' => 'submit','class' => 'btn btn-lg btn-block
+                    btn-success']) }}
 
-                    <a href="{{ route('users.index') }}" class="btn btn-secondary"><i class="fas fa-undo"></i> Return</a>                    {{ Form::close() }}
+                    <a href="{{ route('users.index') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>                    {{ Form::close() }}
 
                 </div>
             </div>

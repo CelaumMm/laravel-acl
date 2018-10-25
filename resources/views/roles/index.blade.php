@@ -34,10 +34,10 @@
                     <td>
                         <div class="form-row">
                             <div class="col-auto">
-                                <a href="{{ URL::to('roles/'.$role->id.'/edit') }}" class="btn btn-sm btn-primary pull-left" style="margin-right: 3px;">Edit</a>
+                                <a href="{{ URL::to('roles/'.$role->id.'/edit') }}" class="btn btn-sm btn-primary pull-left" style="margin-right: 3px;"><i class="fa fa-pen"></i> Edit</a>
                             </div>
                             <div class="col-auto">
-                                {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $role->id] ]) !!} {!! Form::submit('Delete', ['class'
+                                {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $role->id] ]) !!} {!! Form::button('<i class="fa fa-trash"></i> Delete', ['type'=>'submit', 'class'
                                 => 'btn btn-sm btn-danger']) !!} {!! Form::close() !!}
                             </div>
                         </div>
@@ -49,7 +49,7 @@
         </table>
     </div>
 
-    <a href="{{ URL::to('roles/create') }}" class="btn btn-success">Add Role</a>
+    <a href="{{ URL::to('roles/create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add Role</a>
 
 </div>
 @endsection

@@ -40,10 +40,10 @@
                         <td>
                             <div class="form-row">
                                 <div class="col-auto">
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary pull-left">Edit</a>
+                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary pull-left"><i class="fa fa-pen"></i> Edit</a>
                                 </div>
                                 <div class="col-auto">
-                                    {!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id] ]) !!} {!! Form::submit('Delete', ['class'
+                                    {!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id] ]) !!} {!! Form::button('<i class="fa fa-trash"></i> Delete', ['type'=>'submit' ,'class'
                                     => 'btn btn-sm btn-danger']) !!} {!! Form::close() !!}
                                 </div>
                             </div>

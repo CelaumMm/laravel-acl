@@ -32,12 +32,12 @@
                         <td>
                             <div class="form-row">
                                 <div class="col-auto">
-                                    <a href="{{ URL::to('permissions/'.$permission->id.'/edit') }}" class="btn btn-sm btn-primary pull-left">Edit</a>
+                                    <a href="{{ URL::to('permissions/'.$permission->id.'/edit') }}" class="btn btn-sm btn-primary pull-left"><i class="fa fa-pen"></i> Edit</a>
                                 </div>
                                 <div class="col-auto">
                                     {!! Form::open(['method' => 'DELETE', 'route' => ['permissions.destroy', $permission->id] ]) !!}
-                                    {!! Form::submit('Delete', ['class' => 'btn btn-sm btn-danger']) !!}
-                                    {!! Form::close() !!}
+                                    {!! Form::button('<i class="fa fa-trash"></i> Delete', ['type'=>'submit' ,'class'
+                                    => 'btn btn-sm btn-danger']) !!} {!! Form::close() !!}
                                 </div>
                             </div>
                         </td>
@@ -47,7 +47,7 @@
             </table>
         </div>
 
-        <a href="{{ URL::to('permissions/create') }}" class="btn btn-success">Add Permission</a>
+        <a href="{{ URL::to('permissions/create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add Permission</a>
     </div>
 </div>
 
