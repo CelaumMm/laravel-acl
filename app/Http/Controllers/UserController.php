@@ -73,17 +73,26 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id); //Get role specified by id
+        $user = User::findOrFail($id);
 
-        //Validate name, email and password fields
         $this->validate($request, [
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users,email,'.$id,
-            'password'=>'required|min:6|confirmed'
+            'password'=>'nullable|min:6|confirmed'
         ]);
-        $input = $request->only(['name', 'email', 'password']); //Retreive the name, email and password fields
-        $roles = $request['roles']; //Retreive all roles
-        $user->fill($input)->save();
+
+        // Recupere os campos nome, email e senha
+        $data = $request->only(['name', 'email', 'password']);
+
+        // para não alterar a senha se estiver vazia
+        if (is_null($data['password'])) {
+            unset($data['password']);
+        }
+
+        $user->fill($data)->save();
+
+        // Recuperar todos os papéis
+        $roles = $request['roles'];
 
         if (isset($roles)) {
             $user->roles()->sync($roles);  //If one or more role is selected associate user to roles

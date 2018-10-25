@@ -24,11 +24,11 @@ class UpdateProfileformRequest extends FormRequest
     public function rules()
     {
         $id = auth()->user()->id;
-        
+
         return [
             'name'      => 'required|string|max:255',
             'email'     => "required|string|email|max:255|unique:users,email,{$id},id",
-            'password'  => 'max:20',
+            'password' => 'nullable|min:6|confirmed',
             'image'     => 'image'
         ];
     }

@@ -14,38 +14,34 @@
 
                 <div class="card-body">
                     {{ Form::open(['url' => 'users']) }}
-                        <div class="form-group">
-                            {{ Form::label('name', 'Name') }}
-                            {{ Form::text('name', '', ['class' => 'form-control']) }}
-                        </div>
+                    <div class="form-group">
+                        {{ Form::label('name', 'Name') }} {{ Form::text('name', '', ['class' => 'form-control']) }}
+                    </div>
 
-                        <div class="form-group">
-                            {{ Form::label('email', 'Email') }}
-                            {{ Form::email('email', '', ['class' => 'form-control']) }}
-                        </div>
+                    <div class="form-group">
+                        {{ Form::label('email', 'Email') }} {{ Form::email('email', '', ['class' => 'form-control']) }}
+                    </div>
 
-                        <div class='form-group'>
-                            @foreach ($roles as $role)
-                                {{ Form::checkbox('roles[]', $role->id ) }}
-                                {{ Form::label($role->name, ucfirst($role->name)) }}
-                                <br>
-                            @endforeach
-                        </div>
+                    <div class='form-group'>
+                        @foreach ($roles as $role) {{ Form::checkbox('roles[]', $role->id ) }} {{ Form::label($role->name, ucfirst($role->name))
+                        }}
+                        <br> @endforeach
+                    </div>
 
-                        <div class="form-group">
-                            {{ Form::label('password', 'Password') }}<br>
-                            {{ Form::password('password', ['class' => 'form-control']) }}
-                        </div>
+                    <div class="form-group">
+                        {{ Form::label('password', 'Password') }}<br> {{ Form::password('password', ['class' => 'form-control'])
+                        }}
+                    </div>
 
-                        <div class="form-group">
-                            {{ Form::label('password', 'Confirm Password') }}<br>
-                            {{ Form::password('password_confirmation', ['class' => 'form-control']) }}
-                        </div>
+                    <div class="form-group">
+                        {{ Form::label('password', 'Confirm Password') }}<br> {{ Form::password('password_confirmation',
+                        ['class' => 'form-control']) }}
+                    </div>
 
-                        {{ Form::button('<i class="fas fa-save"></i> Add', ['type' => 'submit','class' => 'btn btn-success']) }}
-                        <a href="{{ route('users.index') }}" class="btn btn-secondary"><i class="fas fa-undo"></i> Return</a>
+                    {{ Form::button('<i class="fas fa-save"></i> Save', ['type' => 'submit','class' => 'btn btn-success'])
+                    }}
 
-                    {{ Form::close() }}
+                    <a href="{{ route('users.index') }}" class="btn btn-secondary"><i class="fas fa-undo"></i> Return</a>                    {{ Form::close() }}
                 </div>
             </div>
         </div>

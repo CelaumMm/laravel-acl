@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('title', '| Profile')
-
 @section('content')
 
 <div class="container">
@@ -19,31 +17,35 @@
                         {!! csrf_field() !!}
 
                         <div class="form-group">
-                            <label for="name">Nome</label>
-                            <input type="text" value="{{ auth()->user()->name }}" name="name" placeholder="Nome" class="form-control">
+                            <label for="name">Name</label>
+                            <input type="text" value="{{ auth()->user()->name }}" name="name" class="form-control">
                         </div>
 
                         <div class="form-group">
-                            <label for="email">E-mail</label>
-                            <input type="email" value="{{ auth()->user()->email }}" name="email" placeholder="E-mail" class="form-control">
+                            <label for="email">Email</label>
+                            <input type="email" value="{{ auth()->user()->email }}" name="email" class="form-control">
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Senha</label>
-                            <input type="password" name="password" placeholder="Senha" class="form-control">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Confirm Password</label>
+                            <input type="password" name="password_confirmation" class="form-control">
                         </div>
 
                         <div class="form-group">
                             @if(auth()->user()->image != null)
-                                <img src="{{ url('storage/users/' . auth()->user()->image) }}" alt="{{ auth()->user()->name }}" style="max-width: 50px;">
-                            @endif
+                            <img src="{{ url('storage/users/' . auth()->user()->image) }}" alt="{{ auth()->user()->name }}" style="max-width: 50px;">                            @endif
 
-                            <label for="image">Imagem</label>
+                            <label for="image">Image</label>
                             <input type="file" name="image" class="form-control">
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
                         </div>
 
                     </form>

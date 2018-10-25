@@ -12,15 +12,19 @@ class ProfileController extends Controller
         return view('profile.index');
     }
 
-    public function profileUpdate(UpdateProfileformRequest $request)
+    public function update(UpdateProfileformRequest $request)
     {
         $user = auth()->user();
 
         $data = $request->all();
 
-        if ($data['password'] != null) {
+        /*if ($data['password'] != null) {
             $data['password'] = bcrypt($data['password']);
         } else {
+            unset($data['password']);
+        }*/
+
+        if (is_null($data['password'])) {
             unset($data['password']);
         }
 
