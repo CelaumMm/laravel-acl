@@ -9,7 +9,7 @@ class ProfileController extends Controller
 {
     public function profile()
     {
-        return view('profile.index');
+        return view('profile.edit');
     }
 
     public function update(UpdateProfileformRequest $request)

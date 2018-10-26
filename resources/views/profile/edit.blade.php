@@ -45,7 +45,9 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
+                            <button type="submit" class="btn btn-lg btn-block btn-success"><i class="fas fa-save"></i> Save</button>
+
+                            <a href="{{ route('home') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>
                         </div>
 
                     </form>
