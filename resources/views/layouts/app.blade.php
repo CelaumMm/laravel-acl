@@ -40,11 +40,11 @@
                             <a class="nav-link" href="{{ route('home') }}">Home</a>
                         </li>
 
-                        @if (!Auth::guest())
+                        @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('posts.create') }}">New Article</a>
                         </li>
-                        @endif
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -59,23 +59,21 @@
                         </li>
                         @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"   aria-haspopup="true"  aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('profile') }}">
                                     <i class="fa fa-btn fa-user"></i> {{ __('Profile') }}
-                                </a>
-
-                                @role('Admin') {{-- Laravel-permission blade helper --}}
+                                </a> @role('super-admin') {{-- Laravel-permission blade helper
+                                --}}
                                 <a class="dropdown-item" href="{{ route('users.index') }}">
                                     <i class="fa fa-btn fa-unlock"></i> {{ __('Admin') }}
-                                </a>
-                                @endrole
+                                </a> @endrole
 
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             <i class="fa fa-btn fa-power-off"></i> {{ __('Logout') }}
                                 </a>
 

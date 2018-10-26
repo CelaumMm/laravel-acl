@@ -15,15 +15,13 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
         Role::create([
-            'name'          => 'Admin',
+            'name'          => 'super-admin',
             'guard_name'    => 'web',
         ]);
 
-        DB::table('role_has_permissions')->insert([
-            [
-                'permission_id' => 1,
-                'role_id' => 1
-            ]
-        ]);
+        Role::create([
+            'name'          => 'editor',
+            'guard_name'    => 'web',
+        ])->givePermissionTo(['create post', 'edit post']);
     }
 }

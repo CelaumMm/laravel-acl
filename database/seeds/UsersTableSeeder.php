@@ -16,6 +16,12 @@ class UsersTableSeeder extends Seeder
             'name'      => 'Administrador master',
             'email'     => 'admin@admin.com',
             'password'  => 'admin',
-        ]);
+        ])->assignRole('super-admin');
+
+        User::create([
+            'name'      => 'Editor',
+            'email'     => 'user@user.com',
+            'password'  => 'user',
+        ])->assignRole('editor');
     }
 }

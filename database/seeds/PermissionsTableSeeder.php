@@ -14,24 +14,12 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        Permission::create([
-            'name'          => 'Administer roles & permissions',
-            'guard_name'    => 'web',
-        ]);
-
-        Permission::create([
-            'name'          => 'Create Post',
-            'guard_name'    => 'web',
-        ]);
-
-        Permission::create([
-            'name'          => 'Edit Post',
-            'guard_name'    => 'web',
-        ]);
-
-        Permission::create([
-            'name'          => 'Delete Post',
-            'guard_name'    => 'web',
-        ]);
+        Permission::create(['name' => 'manage users', 'guard_name' => 'web',]);
+        Permission::create([ 'name' => 'manage roles', 'guard_name' => 'web']);
+        Permission::create([ 'name' => 'manage permissions', 'guard_name' => 'web']);
+        Permission::create([ 'name' => 'create post', 'guard_name' => 'web']);
+        Permission::create([ 'name' => 'edit post', 'guard_name' => 'web']);
+        Permission::create([ 'name' => 'delete post', 'guard_name' => 'web']);
+        Permission::create([ 'name' => 'publish post', 'guard_name' => 'web']);
     }
 }
