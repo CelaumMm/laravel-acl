@@ -3,12 +3,12 @@
 @section('content')
 
 <div class="container">
+    @include('includes.alerts')
 
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-
                     <h1><i class='fa fa-key'></i> Add Permission</h1>
                 </div>
 
