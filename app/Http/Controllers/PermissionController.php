@@ -47,9 +47,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name'=>'required|max:40',
-        ]);
+        $this->validate($request, ['name'=>'required|max:40',]);
 
         $name = $request['name'];
         $permission = new Permission();
@@ -58,11 +56,11 @@ class PermissionController extends Controller
 
         $roles = $request['roles'];
 
-        if (!empty($roles)) { //If one or more role is selected
+        if (!empty($roles)) {
             foreach ($roles as $role) {
-                $r = Role::where('id', '=', $role)->firstOrFail(); //Match input role to db record
+                $r = Role::where('id', '=', $role)->firstOrFail();
 
-                $permission = Permission::where('name', '=', $name)->first(); // Combinar entrada // permissão para registro de db
+                $permission = Permission::where('name', '=', $name)->first();
                 $r->givePermissionTo($permission);
             }
         }

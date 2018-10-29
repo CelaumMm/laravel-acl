@@ -47,34 +47,30 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //Validate name and permissions field
-        $this->validate(
-            $request,
-            [
-            'name'=>'required|unique:roles|max:10',
-            'permissions' =>'required',
-            ]
-        );
+        $this->validate($request, [
+            'name' => 'required|max:40|unique:roles',
+        ]);
 
         $name = $request['name'];
         $role = new Role();
         $role->name = $name;
+        $role->save();
 
         $permissions = $request['permissions'];
 
-        $role->save();
-        //Looping thru selected permissions
-        foreach ($permissions as $permission) {
-            $p = Permission::where('id', '=', $permission)->firstOrFail();
-            //Fetch the newly created role and assign permission
-            $role = Role::where('name', '=', $name)->first();
-            $role->givePermissionTo($p);
+        if (!empty($permissions)) {
+            foreach ($permissions as $permission) {
+                $p = Permission::where('id', '=', $permission)->firstOrFail();
+
+                $role = Role::where('name', '=', $name)->first();
+                $role->givePermissionTo($p);
+            }
         }
 
         return redirect()->route('roles.index')
             ->with(
                 'success',
-             'Role'. $role->name.' added!'
+                'Role'. $role->name.' added!'
             );
     }
 
@@ -112,32 +108,33 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Role::findOrFail($id);//Get role with the given id
-        //Validate name and permission fields
+        $role = Role::findOrFail($id);
+
         $this->validate($request, [
-            'name'=>'required|max:10|unique:roles,name,'.$id,
-            'permissions' =>'required',
+            'name' => 'required|max:40|unique:roles,name,'.$id,
         ]);
 
         $data = $request->except(['permissions']);
-        $permissions = $request['permissions'];
         $role->fill($data)->save();
 
-        $p_all = Permission::all();//Get all permissions
-
+        $p_all = Permission::all();
         foreach ($p_all as $p) {
-            $role->revokePermissionTo($p); //Remove all permissions associated with role
+            $role->revokePermissionTo($p);
         }
 
-        foreach ($permissions as $permission) {
-            $p = Permission::where('id', '=', $permission)->firstOrFail(); //Get corresponding form //permission in db
-            $role->givePermissionTo($p);  //Assign permission to role
+        $permissions = $request['permissions'];
+
+        if (!empty($permissions)) {
+            foreach ($permissions as $permission) {
+                $p = Permission::where('id', '=', $permission)->firstOrFail();
+                $role->givePermissionTo($p);
+            }
         }
 
         return redirect()->route('roles.index')
             ->with(
                 'success',
-             'Role'. $role->name.' updated!'
+                'Role'. $role->name.' updated!'
             );
     }
 
