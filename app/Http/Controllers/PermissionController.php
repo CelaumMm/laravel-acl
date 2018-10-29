@@ -153,11 +153,27 @@ class PermissionController extends Controller
         $permission = Permission::findOrFail($id);
 
         //Make it impossible to delete this specific permission
-        if ($permission->name == "Administer roles & permissions") {
+        if ($permission->name == "manage users") {
             return redirect()->route('permissions.index')
             ->with(
-                'success',
-             'Cannot delete this Permission!'
+                'warning',
+                'Cannot delete this Permission!'
+            );
+        }
+        //Make it impossible to delete this specific permission
+        if ($permission->name == "manage roles") {
+            return redirect()->route('permissions.index')
+            ->with(
+                'warning',
+                'Cannot delete this Permission!'
+            );
+        }
+        //Make it impossible to delete this specific permission
+        if ($permission->name == "manage permissions") {
+            return redirect()->route('permissions.index')
+            ->with(
+                'warning',
+                'Cannot delete this Permission!'
             );
         }
 

@@ -150,6 +150,17 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $role = Role::findOrFail($id);
+
+        //Make it impossible to delete this specific role
+        if ($role->name == "super-admin") {
+            return redirect()->route('roles.index')
+            ->with(
+                'warning',
+                'Cannot delete this Permission!'
+            );
+        }
+
+
         $role->delete();
 
         return redirect()->route('roles.index')
