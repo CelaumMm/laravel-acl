@@ -15,13 +15,13 @@ class UsersTableSeeder extends Seeder
         User::create([
             'name'      => 'Administrador master',
             'email'     => 'admin@admin.com',
-            'password'  => 'admin',
+            'password'  => '123456',
         ])->assignRole('super-admin');
 
         User::create([
             'name'      => 'Editor',
             'email'     => 'user@user.com',
-            'password'  => 'user',
+            'password'  => '123456',
         ])->assignRole('editor');
     }
 }
