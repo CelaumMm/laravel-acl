@@ -32,29 +32,39 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        //Validate name, email and password fields
         $this->validate($request, [
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users',
             'password'=>'required|min:6|confirmed'
         ]);
 
-        $user = User::create($request->only('email', 'name', 'password')); //Retrieving only the email and password data
+        $data = $request->only('email', 'name', 'password');
+        $data['password'] = bcrypt($data['password']);
 
-        $roles = $request['roles']; //Retrieving the roles field
-        //Checking if a role was selected
-        if (isset($roles)) {
-            foreach ($roles as $role) {
-                $role_r = Role::where('id', '=', $role)->firstOrFail();
-                $user->assignRole($role_r); //Assigning role to user
+        $user = User::create($data);
+        if ($user) {
+            $roles = $request['roles'];
+
+            if (isset($roles)) {
+                foreach ($roles as $role) {
+                    $role_r = Role::where('id', '=', $role)->firstOrFail();
+
+                    // Atribuindo papel ao usuário
+                    $user->assignRole($role_r);
+                }
             }
+
+            return redirect()
+                    ->route('users.index')
+                    ->with(
+                        'success',
+                        'User successfully added.'
+                    );
         }
-        //Redirect to the users.index view and display message
-        return redirect()->route('users.index')
-            ->with(
-                'success',
-             'User successfully added.'
-            );
+
+        return redirect()
+                ->back()
+                ->with('error', 'Falha ao criar Usuário');
     }
 
     public function show($id)
@@ -72,37 +82,44 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-
         $this->validate($request, [
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users,email,'.$id,
             'password'=>'nullable|min:6|confirmed'
         ]);
 
-        // Recupere os campos nome, email e senha
         $data = $request->only(['name', 'email', 'password']);
 
         // para não alterar a senha se estiver vazia
         if (is_null($data['password'])) {
             unset($data['password']);
-        }
-
-        $user->fill($data)->save();
-
-        // Recuperar todos os papéis
-        $roles = $request['roles'];
-
-        if (isset($roles)) {
-            $user->roles()->sync($roles);  //If one or more role is selected associate user to roles
         } else {
-            $user->roles()->detach(); //If no role is selected remove exisiting role associated to a user
+            $data['password'] = bcrypt($data['password']);
         }
-        return redirect()->route('users.index')
-            ->with(
-                'success',
-             'User successfully edited.'
-            );
+
+        $user = User::findOrFail($id);
+
+        $update = $user->update($data);
+        if ($update) {
+            // Recuperar todos os papéis
+            $roles = $request['roles'];
+
+            if (isset($roles)) {
+                // Se uma ou mais funções forem selecionadas, associe o usuário as funções
+                $user->roles()->sync($roles);
+            } else {
+                // Se nenhuma função for selecionada, remova a função existente associada a um usuário
+                $user->roles()->detach();
+            }
+
+            return redirect()
+                    ->route('users.index')
+                    ->with('success', 'User successfully edited.');
+        }
+
+        return redirect()
+                ->back()
+                ->with('error', 'Falha ao atualizar o User');
     }
 
     public function destroy($id)

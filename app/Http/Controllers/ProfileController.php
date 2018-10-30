@@ -18,14 +18,11 @@ class ProfileController extends Controller
 
         $data = $request->all();
 
-        /*if ($data['password'] != null) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
-        }*/
-
+        // para não alterar a senha se estiver vazia
         if (is_null($data['password'])) {
             unset($data['password']);
+        } else {
+            $data['password'] = bcrypt($data['password']);
         }
 
         $data['image'] = $user->image;
