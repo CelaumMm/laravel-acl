@@ -22,6 +22,6 @@ class RolesTableSeeder extends Seeder
         Role::create([
             'name'          => 'editor',
             'guard_name'    => 'web',
-        ])->givePermissionTo(['create post', 'edit post']);
+        ])->givePermissionTo(['create post', 'edit post', 'delete post', 'publish post']);
     }
 }

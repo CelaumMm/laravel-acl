@@ -15,18 +15,23 @@
                     {{ Form::model($permission, array('route' => array('permissions.update', $permission->id), 'method' => 'PUT')) }}
 
                     <div class="form-group">
-                        {{ Form::label('name', 'Permission Name') }} {{ Form::text('name', null, array('class' => 'form-control')) }}
+                        {{ Form::label('name', 'Permission Name') }}
+                        {{ Form::text('name', null, array('class' => 'form-control')) }}
                     </div>
 
                     @if(!$roles->isEmpty())
-                    <h4>Assign Permission to Roles</h4>
+                        <h4>Assign Permission to Roles</h4>
 
-                    @foreach ($roles as $role) {{ Form::checkbox('roles[]', $role->id ) }} {{ Form::label($role->name, ucfirst($role->name))
-                    }}
-                    <br> @endforeach @endif {{ Form::button('<i class="fas fa-save"></i> Save', ['type' => 'submit','class'
-                    => 'btn btn-lg btn-block btn-success']) }}
+                        @foreach ($roles as $role)
+                            {{ Form::checkbox('roles[]', $role->id ) }} {{ Form::label($role->name, ucfirst($role->name)) }} <br>
+                        @endforeach
+                    @endif
 
-                    <a href="{{ route('permissions.index') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>                    {{ Form::close() }}
+                    {{ Form::button('<i class="fas fa-save"></i> Save', ['type' => 'submit','class' => 'btn btn-lg btn-block btn-success']) }}
+
+                    <a href="{{ route('permissions.index') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>
+
+                    {{ Form::close() }}
 
                 </div>
             </div>

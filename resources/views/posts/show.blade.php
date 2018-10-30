@@ -1,25 +1,30 @@
 @extends('layouts.app')
-
 @section('title', '| View Post')
-
 @section('content')
 
 <div class="container">
-    
+    @include('includes.alerts')
+
     <h1>{{ $post->title }}</h1>
     <hr>
     <p class="lead">{{ $post->body }} </p>
     <hr>
+
     {!! Form::open(['method' => 'DELETE', 'route' => ['posts.destroy', $post->id] ]) !!}
-    <a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
-    @can('Edit Post')
-    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-info" role="button">Edit</a>
+
+
+    @can('edit post')
+    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-lg btn-primary"><i class="fa fa-pen"></i> Edit</a>
     @endcan
-    @can('Delete Post')
-    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+
+
+    @can('delete post')
+    {!! Form::button('<i class="fa fa-trash"></i> Delete', ['type'=>'submit' ,'class' => 'btn btn-lg btn-danger']) !!}
     @endcan
+
+    <a href="{{ url()->previous() }}" class="btn btn-lg btn-secondary"><i class="fas fa-undo"></i> Return</a>
+
     {!! Form::close() !!}
 
 </div>
-
 @endsection

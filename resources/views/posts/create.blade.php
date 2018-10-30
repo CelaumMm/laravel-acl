@@ -25,7 +25,9 @@
                     {{ Form::button('<i class="fas fa-save"></i> Save', ['type' => 'submit','class' => 'btn btn-success btn-lg
                     btn-block']) }}
 
-                    <a href="{{ route('home') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>                    {{ Form::close() }}
+                    <a href="{{ route('home') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>
+
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>
