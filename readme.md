@@ -23,10 +23,13 @@ Aplicação em Laravel v5.7 para iniciar um projeto com o laravel.
 1. Efetuar a instalação clonando ou baixando do repositorio.
 
     ```bash
+    git clone https://github.com/CodeSiteBr/laravel-acl.git
+    ```
+    ```bash
     git clone git@github.com:CodeSiteBr/laravel-acl.git
     ```
 
-    ou baixar do repositorio [laravel-acl](https://github.com/CodeSiteBr/laravel-acl/archive/master.zip)
+    Download [laravel-acl](https://github.com/CodeSiteBr/laravel-acl/archive/master.zip)
 
 2. Entrar na pasta do projeto, execute:
     ```bash
@@ -126,7 +129,7 @@ Aplicação em Laravel v5.7 para iniciar um projeto com o laravel.
 13. Agora você deve ser capaz de visitar o caminho para onde você instalou o aplicativo e ver a página inicial padrão.
 
     [localhost](http://localhost)  
-    [localhost:8080](http://localhost:8080)  
+    [localhost:8000](http://localhost:8000)  
     [localhost:300](http://localhost:300/)
 
     > usuario: admin@admin.com  
