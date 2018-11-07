@@ -37,7 +37,7 @@
                                 <div class="col-auto">
                                     {!! Form::open([
                                         'method' => 'DELETE',
-                                        'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",
+                                        'onsubmit' => "return confirm('".trans("user.confirm")."');",
                                         'route' => ['permissions.destroy', $permission->id]
                                     ]) !!}
                                     {!! Form::button('<i class="fa fa-trash"></i> Delete', ['type'=>'submit' ,'class' => 'btn btn-sm btn-danger']) !!} {!! Form::close() !!}
