@@ -12,7 +12,7 @@
                     <h1><i class='fa fa-key'></i> Edit Permission: {{$permission->name}}</h1>
                 </div>
                 <div class="card-body">
-                    {{ Form::model($permission, array('route' => array('permissions.update', $permission->id), 'method' => 'PUT')) }}
+                    {{ Form::model($permission, array('route' => array('admin.permissions.update', $permission->id), 'method' => 'PUT')) }}
 
                     <div class="form-group">
                         {{ Form::label('name', 'Permission Name') }}
@@ -29,7 +29,7 @@
 
                     {{ Form::button('<i class="fas fa-save"></i> Save', ['type' => 'submit','class' => 'btn btn-lg btn-block btn-success']) }}
 
-                    <a href="{{ route('permissions.index') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>
+                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>
 
                     {{ Form::close() }}
 

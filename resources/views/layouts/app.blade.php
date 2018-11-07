@@ -69,7 +69,7 @@
                                     <i class="fa fa-btn fa-user"></i> {{ __('Profile') }}
                                 </a> @role('super-admin') {{-- Laravel-permission blade helper
                                 --}}
-                                <a class="dropdown-item" href="{{ route('users.index') }}">
+                                <a class="dropdown-item" href="{{ route('admin.users.index') }}">
                                     <i class="fa fa-btn fa-unlock"></i> {{ __('Admin') }}
                                 </a> @endrole
 

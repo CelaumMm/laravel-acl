@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-body">
 
-                    {{ Form::model($role, array('route' => array('roles.update', $role->id), 'method' => 'PUT')) }}
+                    {{ Form::model($role, array('route' => array('admin.roles.update', $role->id), 'method' => 'PUT')) }}
 
                     <div class="form-group">
                         {{ Form::label('name', 'Role Name') }} {{ Form::text('name', null, array('class' => 'form-control')) }}
@@ -25,7 +25,7 @@
                     <br> {{ Form::button('<i class="fas fa-save"></i> Save', ['type' => 'submit','class' => 'btn btn-lg btn-block
                     btn-success']) }}
 
-                    <a href="{{ route('roles.index') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>                    {{ Form::close() }}
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-lg btn-block btn-secondary"><i class="fas fa-undo"></i> Return</a>                    {{ Form::close() }}
                 </div>
             </div>
         </div>

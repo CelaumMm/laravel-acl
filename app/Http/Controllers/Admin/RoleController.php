@@ -13,7 +13,7 @@ class RoleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'permission:manage roles']);
+        $this->middleware(['permission:manage roles']);
     }
 
     /**
@@ -24,7 +24,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all();
-        return view('roles.index', compact('roles'));
+        return view('admin.roles.index', compact('roles'));
     }
 
     /**
@@ -35,7 +35,7 @@ class RoleController extends Controller
     public function create()
     {
         $permissions = Permission::all();
-        return view('roles.create', compact('permissions'));
+        return view('admin.roles.create', compact('permissions'));
     }
 
     /**
@@ -55,7 +55,7 @@ class RoleController extends Controller
         $permissions = $request->input('permissions') ? $request->input('permissions') : [];
         $role->syncPermissions($permissions);
 
-        return redirect()->route('roles.index')
+        return redirect()->route('admin.roles.index')
             ->with(
                 'success',
                 'Role'. $role->name.' added!'
@@ -84,7 +84,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
 
-        return view('roles.edit', compact('role', 'permissions'));
+        return view('admin.roles.edit', compact('role', 'permissions'));
     }
 
     /**
@@ -106,7 +106,7 @@ class RoleController extends Controller
         $permissions = $request->input('permissions') ? $request->input('permissions') : [];
         $role->syncPermissions($permissions);
 
-        return redirect()->route('roles.index')
+        return redirect()->route('admin.roles.index')
             ->with(
                 'success',
                 'Role'. $role->name.' updated!'
@@ -125,7 +125,7 @@ class RoleController extends Controller
 
         // Torna impossível excluir este papel específico
         if ($role->name == "super-admin") {
-            return redirect()->route('roles.index')
+            return redirect()->route('admin.roles.index')
             ->with(
                 'warning',
                 'Cannot delete this Permission!'
@@ -134,7 +134,7 @@ class RoleController extends Controller
 
         $role->delete();
 
-        return redirect()->route('roles.index')
+        return redirect()->route('admin.roles.index')
             ->with(
                 'success',
                 'Role deleted!'

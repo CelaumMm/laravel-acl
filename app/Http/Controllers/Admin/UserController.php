@@ -14,19 +14,19 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'permission:manage users']);
+        $this->middleware(['permission:manage users']);
     }
 
     public function index()
     {
         $users = User::all();
-        return view('users.index', compact('users'));
+        return view('admin.users.index', compact('users'));
     }
 
     public function create()
     {
         $roles = Role::get();
-        return view('users.create', compact('roles'));
+        return view('admin.users.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -45,7 +45,7 @@ class UserController extends Controller
             }
 
             return redirect()
-                    ->route('users.index')
+                    ->route('admin.users.index')
                     ->with(
                         'success',
                         'User successfully added.'
@@ -67,7 +67,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $roles = Role::get();
 
-        return view('users.edit', compact('user', 'roles'));
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, $id)
@@ -93,7 +93,7 @@ class UserController extends Controller
             $user->syncRoles($roles);
 
             return redirect()
-                    ->route('users.index')
+                    ->route('admin.users.index')
                     ->with('success', 'User successfully edited.');
         }
 
@@ -107,7 +107,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $delete = $user->delete();
         if ($delete) {
-            return redirect()->route('users.index')
+            return redirect()->route('admin.users.index')
                 ->with(
                     'success',
                     'User successfully deleted.'

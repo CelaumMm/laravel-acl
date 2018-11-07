@@ -10,9 +10,13 @@
         <h1>
             <i class="fa fa-users"></i> @lang('user.user_management')
 
-            <a class="btn btn-sm btn-dark" href="{{ route('roles.index') }}" class="btn btn-default pull-right">@lang('user.roles')</a>
+            <a class="btn btn-sm btn-dark" href="{{ route('admin.roles.index') }}" class="btn btn-default pull-right">
+                @lang('user.roles')
+            </a>
 
-            <a class="btn btn-sm btn-dark" href="{{ route('permissions.index') }}" class="btn btn-default pull-right">@lang('user.permissions')</a>
+            <a class="btn btn-sm btn-dark" href="{{ route('admin.permissions.index') }}" class="btn btn-default pull-right">
+                @lang('user.permissions')
+            </a>
         </h1>
 
         <hr>
@@ -40,13 +44,13 @@
                         <td>
                             <div class="form-row">
                                 <div class="col-auto">
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary pull-left"><i class="fa fa-pen"></i> @lang('user.edit')</a>
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-primary pull-left"><i class="fa fa-pen"></i> @lang('user.edit')</a>
                                 </div>
                                 <div class="col-auto">
                                     {!! Form::open([
                                         'method' => 'DELETE',
                                         'onsubmit' => "return confirm('".trans("user.confirm")."');",
-                                        'route' => ['users.destroy', $user->id]
+                                        'route' => ['admin.users.destroy', $user->id]
                                     ]) !!}
 
                                     {!! Form::button('<i class="fa fa-trash"></i> ' . trans("user.delete"), ['type'=>'submit' ,'class' => 'btn btn-sm btn-danger']) !!}
@@ -62,7 +66,7 @@
             </table>
         </div>
 
-        <a href="{{ route('users.create') }}" class="btn btn-success"><i class="fa fa-user-plus"></i> @lang('user.add_user')</a>
+        <a href="{{ route('admin.users.create') }}" class="btn btn-success"><i class="fa fa-user-plus"></i> @lang('user.add_user')</a>
 
     </div>
 </div>

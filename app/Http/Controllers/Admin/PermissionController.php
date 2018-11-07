@@ -13,7 +13,7 @@ class PermissionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'permission:manage permissions']);
+        $this->middleware(['permission:manage permissions']);
     }
 
     /**
@@ -24,7 +24,7 @@ class PermissionController extends Controller
     public function index()
     {
         $permissions = Permission::all();
-        return view('permissions.index', compact('permissions'));
+        return view('admin.permissions.index', compact('permissions'));
     }
 
     /**
@@ -36,7 +36,7 @@ class PermissionController extends Controller
     {
         $roles = Role::get();
 
-        return view('permissions.create', compact('roles'));
+        return view('admin.permissions.create', compact('roles'));
     }
 
     /**
@@ -56,7 +56,7 @@ class PermissionController extends Controller
         $roles = $request->input('roles') ? $request->input('roles') : [];
         $permission->syncRoles($roles);
 
-        return redirect()->route('permissions.index')
+        return redirect()->route('admin.permissions.index')
             ->with(
                 'success',
                 'Permission'. $permission->name.' added!'
@@ -85,7 +85,7 @@ class PermissionController extends Controller
         $permission = Permission::findOrFail($id);
         $roles = Role::all();
 
-        return view('permissions.edit', compact('permission', 'roles'));
+        return view('admin.permissions.edit', compact('permission', 'roles'));
     }
 
     /**
@@ -107,7 +107,7 @@ class PermissionController extends Controller
         $roles = $request->input('roles') ? $request->input('roles') : [];
         $permission->syncRoles($roles);
 
-        return redirect()->route('permissions.index')
+        return redirect()->route('admin.permissions.index')
             ->with(
                 'success',
                 'Permission'. $permission->name.' updated!'
@@ -126,7 +126,7 @@ class PermissionController extends Controller
 
         // Tornar impossível excluir esta permissão
         if ($permission->name == "manage users") {
-            return redirect()->route('permissions.index')
+            return redirect()->route('admin.permissions.index')
             ->with(
                 'warning',
                 'Cannot delete this Permission!'
@@ -134,7 +134,7 @@ class PermissionController extends Controller
         }
         // Tornar impossível excluir esta permissão
         if ($permission->name == "manage roles") {
-            return redirect()->route('permissions.index')
+            return redirect()->route('admin.permissions.index')
             ->with(
                 'warning',
                 'Cannot delete this Permission!'
@@ -142,7 +142,7 @@ class PermissionController extends Controller
         }
         // Tornar impossível excluir esta permissão
         if ($permission->name == "manage permissions") {
-            return redirect()->route('permissions.index')
+            return redirect()->route('admin.permissions.index')
             ->with(
                 'warning',
                 'Cannot delete this Permission!'
@@ -151,7 +151,7 @@ class PermissionController extends Controller
 
         $permission->delete();
 
-        return redirect()->route('permissions.index')
+        return redirect()->route('admin.permissions.index')
             ->with(
                 'success',
                 'Permission deleted!'
