@@ -38,6 +38,7 @@ class UserController extends Controller
         ]);
 
         $user = User::create($request->except('roles'));
+
         if ($user) {
             $roles = $request->input('roles');
             if (isset($roles)) {
@@ -78,16 +79,14 @@ class UserController extends Controller
             'password'=>'nullable|min:6|confirmed'
         ]);
 
-        $data = $request->only(['name', 'email', 'password']);
-
         // para não alterar a senha se estiver vazia
-        if (is_null($data['password'])) {
-            unset($data['password']);
+        if (is_null($request['password'])) {
+            unset($request['password']);
         }
 
         $user = User::findOrFail($id);
+        $update = $user->update($request->except('roles'));
 
-        $update = $user->update($data);
         if ($update) {
             $roles = $request->input('roles') ? $request->input('roles') : [];
             $user->syncRoles($roles);

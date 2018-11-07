@@ -9,7 +9,7 @@ $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'adm
 Route::resource('posts', 'PostController');
 
 // Site
-Route::get('meu-perfil', 'ProfileController@profile')->name('profile')->middleware('auth');
+Route::get('meu-perfil', 'ProfileController@edit')->name('profile.edit')->middleware('auth');
 Route::post('atualizar-perfil', 'ProfileController@update')->name('profile.update')->middleware('auth');
 
 Route::get('/', 'PostController@index')->name('home');

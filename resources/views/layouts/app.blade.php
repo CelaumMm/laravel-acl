@@ -65,7 +65,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('profile') }}">
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                     <i class="fa fa-btn fa-user"></i> {{ __('Profile') }}
                                 </a> @role('super-admin') {{-- Laravel-permission blade helper
                                 --}}

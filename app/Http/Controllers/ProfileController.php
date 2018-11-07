@@ -7,7 +7,7 @@ use App\Http\Requests\UpdateProfileformRequest;
 
 class ProfileController extends Controller
 {
-    public function profile()
+    public function edit()
     {
         return view('profile.edit');
     }
@@ -21,8 +21,6 @@ class ProfileController extends Controller
         // para não alterar a senha se estiver vazia
         if (is_null($data['password'])) {
             unset($data['password']);
-        } else {
-            $data['password'] = bcrypt($data['password']);
         }
 
         $data['image'] = $user->image;
@@ -51,7 +49,7 @@ class ProfileController extends Controller
         $update = $user->update($data);
         if ($update) {
             return redirect()
-                    ->route('profile')
+                    ->route('profile.edit')
                     ->with('success', 'Sucesso ao atualizar!');
         }
 
