@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-//Importing laravel-permission models
+use App\Http\Controllers\Controller;
+
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -22,9 +23,8 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::all(); //Get all permissions
-
-        return view('permissions.index')->with('permissions', $permissions);
+        $permissions = Permission::all();
+        return view('permissions.index', compact('permissions'));
     }
 
     /**
@@ -34,9 +34,9 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        $roles = Role::get(); //Get all roles
+        $roles = Role::get();
 
-        return view('permissions.create')->with('roles', $roles);
+        return view('permissions.create', compact('roles'));
     }
 
     /**
@@ -48,29 +48,18 @@ class PermissionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'=>'required|max:40|unique:permissions',
+            'name'=>"required|max:40|unique:permissions,name,id",
         ]);
 
-        $name = $request['name'];
-        $permission = new Permission();
-        $permission->name = $name;
-        $permission->save();
+        $permission = Permission::create($request->except('roles'));
 
-        $roles = $request['roles'];
-
-        if (!empty($roles)) {
-            foreach ($roles as $role) {
-                $r = Role::where('id', '=', $role)->firstOrFail();
-
-                $permission = Permission::where('name', '=', $name)->first();
-                $r->givePermissionTo($permission);
-            }
-        }
+        $roles = $request->input('roles') ? $request->input('roles') : [];
+        $permission->syncRoles($roles);
 
         return redirect()->route('permissions.index')
             ->with(
                 'success',
-             'Permission'. $permission->name.' added!'
+                'Permission'. $permission->name.' added!'
             );
     }
 
@@ -108,37 +97,20 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $permission = Permission::findOrFail($id);
-
         $this->validate($request, [
-            'name'=>'required|max:40|unique:permissions',
+            'name'=>"required|max:40|unique:permissions,name,{$id},id",
         ]);
 
-        $name = $request['name'];
-        $permission->name = $name;
-        $permission->save();
+        $permission = Permission::findOrFail($id);
+        $permission->update($request->except('roles'));
 
-        $roles = $request['roles'];
-
-        $r_all = Role::all();
-        foreach ($r_all as $r) {
-            $permission->revokePermissionTo($r); //Remove all roles associated with permission
-        }
-
-        if (!empty($roles)) {
-            foreach ($roles as $role) {
-                $r = Role::where('id', '=', $role)->firstOrFail(); //Get corresponding form //role in db
-
-                $permission = Permission::where('name', '=', $name)->first();
-
-                $r->givePermissionTo($permission);  //Assign role to permission
-            }
-        }
+        $roles = $request->input('roles') ? $request->input('roles') : [];
+        $permission->syncRoles($roles);
 
         return redirect()->route('permissions.index')
             ->with(
                 'success',
-             'Permission'. $permission->name.' updated!'
+                'Permission'. $permission->name.' updated!'
             );
     }
 
@@ -152,7 +124,7 @@ class PermissionController extends Controller
     {
         $permission = Permission::findOrFail($id);
 
-        //Make it impossible to delete this specific permission
+        // Tornar impossível excluir esta permissão
         if ($permission->name == "manage users") {
             return redirect()->route('permissions.index')
             ->with(
@@ -160,7 +132,7 @@ class PermissionController extends Controller
                 'Cannot delete this Permission!'
             );
         }
-        //Make it impossible to delete this specific permission
+        // Tornar impossível excluir esta permissão
         if ($permission->name == "manage roles") {
             return redirect()->route('permissions.index')
             ->with(
@@ -168,7 +140,7 @@ class PermissionController extends Controller
                 'Cannot delete this Permission!'
             );
         }
-        //Make it impossible to delete this specific permission
+        // Tornar impossível excluir esta permissão
         if ($permission->name == "manage permissions") {
             return redirect()->route('permissions.index')
             ->with(
@@ -182,7 +154,36 @@ class PermissionController extends Controller
         return redirect()->route('permissions.index')
             ->with(
                 'success',
-             'Permission deleted!'
+                'Permission deleted!'
             );
+    }
+
+    /**
+     * Delete all selected Permission at once.
+     *
+     * @param Request $request
+     */
+    public function massDestroy(Request $request)
+    {
+        if ($request->input('ids')) {
+            $permissions = Permission::whereIn('id', $request->input('ids'))->get();
+
+            foreach ($permissions as $permission) {
+                // Tornar impossível excluir esta permissão
+                if ($permission->name == "manage users") {
+                    continue;
+                }
+                // Tornar impossível excluir esta permissão
+                if ($permission->name == "manage roles") {
+                    continue;
+                }
+                // Tornar impossível excluir esta permissão
+                if ($permission->name == "manage permissions") {
+                    continue;
+                }
+
+                $permission->delete();
+            }
+        }
     }
 }

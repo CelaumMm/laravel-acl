@@ -8,11 +8,11 @@
     <div class="row">
 
         <h1>
-            <i class="fa fa-users"></i> User Administration
+            <i class="fa fa-users"></i> @lang('user.user_management')
 
-            <a class="btn btn-sm btn-dark" href="{{ route('roles.index') }}" class="btn btn-default pull-right">Roles</a>
+            <a class="btn btn-sm btn-dark" href="{{ route('roles.index') }}" class="btn btn-default pull-right">@lang('user.roles')</a>
 
-            <a class="btn btn-sm btn-dark" href="{{ route('permissions.index') }}" class="btn btn-default pull-right">Permissions</a>
+            <a class="btn btn-sm btn-dark" href="{{ route('permissions.index') }}" class="btn btn-default pull-right">@lang('user.permissions')</a>
         </h1>
 
         <hr>
@@ -21,11 +21,11 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Date/Time Added</th>
-                        <th>User Roles</th>
-                        <th>Operations</th>
+                        <th>@lang('user.name')</th>
+                        <th>@lang('user.email')</th>
+                        <th>@lang('user.created_at')</th>
+                        <th>@lang('user.user_roles')</th>
+                        <th>@lang('user.operations')</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,11 +40,18 @@
                         <td>
                             <div class="form-row">
                                 <div class="col-auto">
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary pull-left"><i class="fa fa-pen"></i> Edit</a>
+                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary pull-left"><i class="fa fa-pen"></i> @lang('user.edit')</a>
                                 </div>
                                 <div class="col-auto">
-                                    {!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id] ]) !!} {!! Form::button('<i class="fa fa-trash"></i> Delete', ['type'=>'submit' ,'class'
-                                    => 'btn btn-sm btn-danger']) !!} {!! Form::close() !!}
+                                    {!! Form::open([
+                                        'method' => 'DELETE',
+                                        'onsubmit' => "return confirm('".trans("user.confirm")."');",
+                                        'route' => ['users.destroy', $user->id]
+                                    ]) !!}
+
+                                    {!! Form::button('<i class="fa fa-trash"></i> ' . trans("user.delete"), ['type'=>'submit' ,'class' => 'btn btn-sm btn-danger']) !!}
+
+                                    {!! Form::close() !!}
                                 </div>
                             </div>
                         </td>
@@ -55,7 +62,7 @@
             </table>
         </div>
 
-        <a href="{{ route('users.create') }}" class="btn btn-success"><i class="fa fa-user-plus"></i> Add User</a>
+        <a href="{{ route('users.create') }}" class="btn btn-success"><i class="fa fa-user-plus"></i> @lang('user.add_user')</a>
 
     </div>
 </div>

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-//Importing laravel-permission models
+use App\Http\Controllers\Controller;
+
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -22,9 +23,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();//Get all roles
-
-        return view('roles.index')->with('roles', $roles);
+        $roles = Role::all();
+        return view('roles.index', compact('roles'));
     }
 
     /**
@@ -34,9 +34,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permissions = Permission::all();//Get all permissions
-
-        return view('roles.create', ['permissions'=>$permissions]);
+        $permissions = Permission::all();
+        return view('roles.create', compact('permissions'));
     }
 
     /**
@@ -47,23 +46,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, ['name' => 'required|max:40|unique:roles',]);
+        $this->validate($request, [
+            'name' => 'required|max:40|unique:roles,name,id'
+        ]);
 
-        $name = $request['name'];
-        $role = new Role();
-        $role->name = $name;
-        $role->save();
+        $role = Role::create($request->except('permissions'));
 
-        $permissions = $request['permissions'];
-
-        if (!empty($permissions)) {
-            foreach ($permissions as $permission) {
-                $p = Permission::where('id', '=', $permission)->firstOrFail();
-
-                $role = Role::where('name', '=', $name)->first();
-                $role->givePermissionTo($p);
-            }
-        }
+        $permissions = $request->input('permissions') ? $request->input('permissions') : [];
+        $role->syncPermissions($permissions);
 
         return redirect()->route('roles.index')
             ->with(
@@ -106,28 +96,15 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Role::findOrFail($id);
-
         $this->validate($request, [
-            'name' => 'required|max:40|unique:roles,name,'.$id,
+            'name' => "required|max:40|unique:roles,name,{$id},id",
         ]);
 
-        $data = $request->except(['permissions']);
-        $role->fill($data)->save();
+        $role = Role::findOrFail($id);
+        $role->update($request->except('permissions'));
 
-        $p_all = Permission::all();
-        foreach ($p_all as $p) {
-            $role->revokePermissionTo($p);
-        }
-
-        $permissions = $request['permissions'];
-
-        if (!empty($permissions)) {
-            foreach ($permissions as $permission) {
-                $p = Permission::where('id', '=', $permission)->firstOrFail();
-                $role->givePermissionTo($p);
-            }
-        }
+        $permissions = $request->input('permissions') ? $request->input('permissions') : [];
+        $role->syncPermissions($permissions);
 
         return redirect()->route('roles.index')
             ->with(
@@ -146,7 +123,7 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
-        //Make it impossible to delete this specific role
+        // Torna impossível excluir este papel específico
         if ($role->name == "super-admin") {
             return redirect()->route('roles.index')
             ->with(
@@ -155,13 +132,31 @@ class RoleController extends Controller
             );
         }
 
-
         $role->delete();
 
         return redirect()->route('roles.index')
             ->with(
                 'success',
-             'Role deleted!'
+                'Role deleted!'
             );
+    }
+
+    /**
+     * Delete all selected Role at once.
+     *
+     * @param Request $request
+     */
+    public function massDestroy(Request $request)
+    {
+        if ($request->input('ids')) {
+            $roles = Role::whereIn('id', $request->input('ids'))->get();
+
+            foreach ($roles as $role) {
+                // Torna impossível excluir este papel específico
+                if ($role->name != "super-admin") {
+                    $role->delete();
+                }
+            }
+        }
     }
 }

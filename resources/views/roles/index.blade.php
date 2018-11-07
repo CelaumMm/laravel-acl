@@ -37,7 +37,11 @@
                                 <a href="{{ URL::to('roles/'.$role->id.'/edit') }}" class="btn btn-sm btn-primary pull-left" style="margin-right: 3px;"><i class="fa fa-pen"></i> Edit</a>
                             </div>
                             <div class="col-auto">
-                                {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $role->id] ]) !!}
+                                {!! Form::open([
+                                    'method' => 'DELETE',
+                                    'onsubmit' => "return confirm('".trans("global.app_are_you_sure")."');",
+                                    'route' => ['roles.destroy', $role->id]
+                                ]) !!}
                                 {!! Form::button('<i class="fa fa-trash"></i> Delete', ['type'=>'submit', 'class' => 'btn btn-sm btn-danger']) !!}
                                 {!! Form::close() !!}
                             </div>

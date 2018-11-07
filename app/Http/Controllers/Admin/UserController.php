@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 
-//Importing laravel-permission models
+use App\Http\Controllers\Controller;
+
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -18,40 +19,29 @@ class UserController extends Controller
 
     public function index()
     {
-        //Get all users and pass it to the view
         $users = User::all();
-        return view('users.index')->with('users', $users);
+        return view('users.index', compact('users'));
     }
 
     public function create()
     {
-        //Get all roles and pass it to the view
         $roles = Role::get();
-        return view('users.create', ['roles'=>$roles]);
+        return view('users.create', compact('roles'));
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
             'name'=>'required|max:120',
-            'email'=>'required|email|unique:users',
+            'email'=>"required|email|unique:users,email,id",
             'password'=>'required|min:6|confirmed'
         ]);
 
-        $data = $request->only('email', 'name', 'password');
-        $data['password'] = bcrypt($data['password']);
-
-        $user = User::create($data);
+        $user = User::create($request->except('roles'));
         if ($user) {
-            $roles = $request['roles'];
-
+            $roles = $request->input('roles');
             if (isset($roles)) {
-                foreach ($roles as $role) {
-                    $role_r = Role::where('id', '=', $role)->firstOrFail();
-
-                    // Atribuindo papel ao usuário
-                    $user->assignRole($role_r);
-                }
+                $user->assignRole($roles);
             }
 
             return redirect()
@@ -74,17 +64,17 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        $user = User::findOrFail($id); //Get user with specified id
-        $roles = Role::get(); //Get all roles
+        $user = User::findOrFail($id);
+        $roles = Role::get();
 
-        return view('users.edit', compact('user', 'roles')); //pass user and roles data to view
+        return view('users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'name'=>'required|max:120',
-            'email'=>'required|email|unique:users,email,'.$id,
+            'email'=>"required|email|unique:users,email,{$id},id",
             'password'=>'nullable|min:6|confirmed'
         ]);
 
@@ -93,24 +83,14 @@ class UserController extends Controller
         // para não alterar a senha se estiver vazia
         if (is_null($data['password'])) {
             unset($data['password']);
-        } else {
-            $data['password'] = bcrypt($data['password']);
         }
 
         $user = User::findOrFail($id);
 
         $update = $user->update($data);
         if ($update) {
-            // Recuperar todos os papéis
-            $roles = $request['roles'];
-
-            if (isset($roles)) {
-                // Se uma ou mais funções forem selecionadas, associe o usuário as funções
-                $user->roles()->sync($roles);
-            } else {
-                // Se nenhuma função for selecionada, remova a função existente associada a um usuário
-                $user->roles()->detach();
-            }
+            $roles = $request->input('roles') ? $request->input('roles') : [];
+            $user->syncRoles($roles);
 
             return redirect()
                     ->route('users.index')
@@ -124,14 +104,34 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        //Find a user with a given id and delete
         $user = User::findOrFail($id);
-        $user->delete();
+        $delete = $user->delete();
+        if ($delete) {
+            return redirect()->route('users.index')
+                ->with(
+                    'success',
+                    'User successfully deleted.'
+                );
+        }
 
-        return redirect()->route('users.index')
-            ->with(
-                'success',
-             'User successfully deleted.'
-            );
+        return redirect()
+            ->back()
+            ->with('error', 'Falha ao deletar o Usuário');
+    }
+
+    /**
+     * Delete all selected User at once.
+     *
+     * @param Request $request
+     */
+    public function massDestroy(Request $request)
+    {
+        if ($request->input('ids')) {
+            $users = User::whereIn('id', $request->input('ids'))->get();
+
+            foreach ($users as $user) {
+                $user->delete();
+            }
+        }
     }
 }
